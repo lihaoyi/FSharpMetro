@@ -8,14 +8,13 @@ open Microsoft.Xna.Framework
 open System.Xml.Linq
 open Microsoft.Xna.Framework.Input.Touch
 open Extensions
-
+open Microsoft.Xna.Framework.Graphics
 type Level(
         world: World,
         statics: list<Body>,
         dynamics: list<Body>,
         player: Body
     ) =
-    
 
     let touchJoints = new Dictionary<int, List<FixedMouseJoint>>()
 
@@ -24,49 +23,65 @@ type Level(
     member this.TouchEvent(loc: TouchLocation) = 
         match loc.State with
         | TouchLocationState.Moved when touchJoints.ContainsKey(loc.Id) ->
-            Debug.WriteLine("MOVE")
             for joint in touchJoints.[loc.Id] do
                 joint.WorldAnchorB <- loc.Position   
             
-            ()
-              
         | TouchLocationState.Released ->
-            Debug.WriteLine("RELEASED")
+            touchJoints.Remove(loc.Id)
             for joint in touchJoints.[loc.Id] do
                 world.RemoveJoint(joint)
 
-            touchJoints.Remove(loc.Id)
-            
-            ()
         | _ ->         
-            Debug.WriteLine("INIT")
             touchJoints.[loc.Id] <- new List<FixedMouseJoint>()
             for body in world.BodyList do
                 if body.Contains(loc.Position) then
-                    Debug.WriteLine("A")
                     let joint = new FixedMouseJoint(body, loc.Position)
-                    Debug.WriteLine("B")
                     joint.MaxForce <- 1000.0f * body.Mass
-                    Debug.WriteLine("C")
                     touchJoints.[loc.Id].Add(joint)
-                    Debug.WriteLine("D")
                     world.AddJoint(joint)
-                    Debug.WriteLine("E")
         
     member this.Update(gameTime: GameTime) = 
+        let touchCollection = TouchPanel.GetState();
+            
+        for loc in touchCollection do
+            this.TouchEvent(
+                new TouchLocation(
+                    loc.Id, 
+                    loc.State, 
+                    Misc.TouchScreenToWorld.Transform(loc.Position)
+                )
+            )
+           
         world.Step(
             Math.Min(
                 float32 gameTime.ElapsedGameTime.TotalSeconds, 
                 float32 (1.0f / 30.0f)
             )
-        );
+        )
 
-type App(data: XElement, matrix: Matrix, game: Game) = 
+    member this.Draw(g: GraphicsDevice, gameTime: GameTime) = 
+        g.Clear(Color.DarkGreen);
+        let effect = new BasicEffect(g)
+        effect.VertexColorEnabled <- true
+        for pass in effect.CurrentTechnique.Passes do
+            pass.Apply();
+            for body in world.BodyList do
+                g.Fill(Misc.WorldToScreen, body, Color.PowderBlue);
+                g.Draw(Misc.WorldToScreen, body, Color.Blue, 0.05f);
+
+
+type App(loader: Func<String, XElement>, game: Game) as this = 
+    inherit DrawableGameComponent(game)
 
     let level = 
-        let world, statics, dynamics, player = FLoad.Load matrix data
+        let data = loader.Invoke("out.svg")
+        let world, statics, dynamics, player = FLoad.Load Misc.EditorToWorld data
+        game.ResetElapsedTime();
         new Level(world, statics, dynamics, player)
 
     member this.Level = level
     member this.Update(gameTime: GameTime) = 
         this.Level.Update(gameTime)
+
+    member this.Draw(gameTime: GameTime) = 
+        level.Draw(game.GraphicsDevice, gameTime) 

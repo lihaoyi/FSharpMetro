@@ -9,8 +9,6 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PortableFSharp", "PortableL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farseer Portable", "Farseer Portable\Farseer Portable.csproj", "{CF18AAD1-C336-428A-ABB1-80D35112E4A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortableCSharp", "PortableCSharp\PortableCSharp.csproj", "{998E2281-E94C-420F-8754-77E8E949B926}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,16 +89,6 @@ Global
 		{CF18AAD1-C336-428A-ABB1-80D35112E4A8}.Release|ARM.ActiveCfg = Release|Any CPU
 		{CF18AAD1-C336-428A-ABB1-80D35112E4A8}.Release|x64.ActiveCfg = Release|Any CPU
 		{CF18AAD1-C336-428A-ABB1-80D35112E4A8}.Release|x86.ActiveCfg = Release|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Release|Any CPU.Build.0 = Release|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Release|ARM.ActiveCfg = Release|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Release|x64.ActiveCfg = Release|Any CPU
-		{998E2281-E94C-420F-8754-77E8E949B926}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

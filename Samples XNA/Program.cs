@@ -1,6 +1,8 @@
 
+using System.Xml.Linq;
 using Microsoft.Xna.Framework;
-using Samples_XNA_Win8.Game;
+using Microsoft.Xna.Framework.Graphics;
+using MyFSharp;
 
 namespace FarseerPhysics.SamplesFramework
 {
@@ -21,25 +23,38 @@ namespace FarseerPhysics.SamplesFramework
     /// </summary>
     public class FarseerPhysicsGame : Microsoft.Xna.Framework.Game
     {
-        private GraphicsDeviceManager _graphics;
-
         public FarseerPhysicsGame()
         {
             Window.Title = "Farseer Samples Framework";
-            _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferMultiSampling = true;
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 720;
+            var graphics = new GraphicsDeviceManager(this);
+            graphics.PreferMultiSampling = true;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
 
             Content.RootDirectory = "Content";
+            
+            graphics.DeviceCreated += (x, y) => {
+                graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            };
 
-            //new-up components and add to App.Components
-            App = new AppView(this);
-            Components.Add(App);
-
+            Components.Add(new AppView(this));
         }
-
-        public AppView App { get; set; }
-
+    }
+    public class AppView : DrawableGameComponent
+    {
+        private App app;
+        public AppView(Microsoft.Xna.Framework.Game game)
+            : base(game)
+        {
+            app = new App(x => XElement.Load(x), game);
+        }
+        public override void Update(GameTime gameTime)
+        {
+            app.Update(gameTime);
+        }
+        public override void Draw(GameTime gameTime)
+        {
+            app.Draw(gameTime);
+        }
     }
 }  

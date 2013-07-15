@@ -100,18 +100,15 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game\Graphics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Game\LevelView.cs" />
-    <Compile Include="Game\AppView.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="Assets\out.svg" />
-    <Content Include="Game\out.svg">
+    <Content Include="out.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Plan.txt" />
@@ -127,10 +124,6 @@
     <ProjectReference Include="..\Farseer Portable\Farseer Portable.csproj">
       <Project>{cf18aad1-c336-428a-abb1-80d35112e4a8}</Project>
       <Name>Farseer Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PortableCSharp\PortableCSharp.csproj">
-      <Project>{998e2281-e94c-420f-8754-77e8e949b926}</Project>
-      <Name>PortableCSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\PortableLibrary1\PortableFSharp.fsproj">
       <Project>{fde55019-442e-42ad-8e98-9731e7cd6f11}</Project>

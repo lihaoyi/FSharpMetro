@@ -53,11 +53,6 @@
       <Project>{cf18aad1-c336-428a-abb1-80d35112e4a8}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\PortableCSharp\PortableCSharp.csproj">
-      <Name>PortableCSharp</Name>
-      <Project>{998e2281-e94c-420f-8754-77e8e949b926}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

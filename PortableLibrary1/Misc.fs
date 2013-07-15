@@ -1,5 +1,4 @@
-﻿#light
-namespace MyFSharp
+﻿namespace MyFSharp
 open System
 open System.Collections.Generic
 open System.Diagnostics
@@ -8,8 +7,32 @@ open System.Linq
 open System.Xml.Linq
 open FarseerPhysics.Dynamics
 open FarseerPhysics.Factories
+open FarseerPhysics.Collision.Shapes
+open FarseerPhysics.Common.Decomposition
+open FarseerPhysics.Common
 open Microsoft.Xna.Framework
+open Microsoft.Xna.Framework.Graphics
 
+
+module Misc =
+    // Normal world is 16x9
+    let EditorToWorld = Matrix.Multiply(
+        Matrix.CreateTranslation(-800.0f, -450.0f, 0.0f),
+        Matrix.CreateScale(0.01f)
+    )
+
+    // Screen is 1 x 1
+    let WorldToScreen = Matrix.Multiply(
+        Matrix.CreateScale(1.0f / 8.0f, -1.0f / 4.5f, 1.0f),
+        Matrix.Identity
+    )
+
+    // Screen is 1280x80
+    let TouchScreenToWorld = Matrix.Multiply(
+
+        Matrix.CreateTranslation(-640.0f, -400.0f, 0.0f),
+        Matrix.CreateScale(1.0f / 80.0f, 1.0f / 80.0f, 1.0f)
+    )
 module Extensions = 
     let ns = "{http://www.w3.org/2000/svg}"
 
@@ -26,6 +49,15 @@ module Extensions =
         
     type Vector2 with
         member this.To3() = new Vector3(this.X, this.Y, 0.0f)
+        member this.Rotate(theta: float) = 
+            let sin = float32(Math.Sin(theta))
+            let cos = float32(Math.Cos(theta))
+            new Vector2(
+                this.X * sin + this.Y * cos,
+                this.X * cos + this.Y * -sin
+            )
+        member this.Normal() = new Vector2(-this.Y, this.X)
+        member this.Unit() = Vector2.Normalize(this)
 
     type Vector3 with
         member this.To2() = new Vector2(this.X, this.Y)
@@ -52,6 +84,74 @@ module Extensions =
 
         member this.Sub(?name: String, ?id: String, ?fill: String) = 
             this.Subs(?name=name, ?id=id, ?fill=fill).Single()
+
+    let getVertices(shape: Shape): seq<Vector2> = 
+        let mul: float32 = 3.14f/32.0f
+        match shape with
+        | :? CircleShape as s ->
+            [ 
+                for theta in [0.0f..63.0f] -> 
+                s.Position + (new Vector2(0.0f, s.Radius)).Rotate(float (theta * mul))
+            ]  :> seq<Vector2>
+                
+        | :? PolygonShape as s -> 
+            s.Vertices :> seq<Vector2>
+
+    type GraphicsDevice with
+        member this.Draw(WorldToScreen: Matrix, body: Body, color: Color, width: float32) = 
+
+            let vertices = getVertices(body.FixtureList.[0].Shape)
+
+            let pairs = (Seq.append vertices [vertices.First()]).Select(fun (x: Vector2) -> body.GetWorldPoint(x)).Pairwise()
+            for p1, p2 in pairs do
+            
+                let normal = (p2 - p1).Normal().Unit() * (width / 2.0f)
+                let points = [| p1 + normal; p1 - normal; p2 + normal; p2 - normal |]
+                let outs = [| for x in points -> new VertexPositionColor(WorldToScreen.Transform(x).To3(), color) |]
+                                 
+                this.DrawUserPrimitives<VertexPositionColor>(
+                    PrimitiveType.TriangleStrip,
+                    outs,
+                    0,
+                    outs.Length - 2,
+                    VertexPositionColor.VertexDeclaration
+                );
+        
+        member this.Fill(WorldToScreen: Matrix, body: Body, color: Color) = 
+            let vertices = getVertices(body.FixtureList.[0].Shape)
+
+            let decomposed = BayazitDecomposer.ConvexPartition(new Vertices(vertices.ToArray()))
+            for vs in decomposed do
+                
+                let outs = Array.zeroCreate<VertexPositionColor>(vs.Count)
+                for i = 0 to outs.Length-1 do 
+                
+                    let srcIndex = 
+                        if i%2 = 0 then i/2 else outs.Length - i/2 - 1
+
+                    let src = vs.[srcIndex] + body.WorldCenter;
+
+                    let worldSrc = Matrix.CreateRotationZ(body.Rotation).Transform(src - body.WorldCenter) + body.WorldCenter;
+
+                    let screenSrc = WorldToScreen.Transform(worldSrc);
+
+                    outs.[i] <- new VertexPositionColor(
+                        screenSrc.To3(),
+                        color
+                    )
+                    ()
+
+                
+                this.DrawUserPrimitives<VertexPositionColor>(
+                    PrimitiveType.TriangleStrip,
+                    Array.rev outs,
+                    0,
+                    outs.Length - 2,
+                    VertexPositionColor.VertexDeclaration
+                );
+            
+        
+    
 
 module FLoad = 
     open Extensions
@@ -135,7 +235,5 @@ module FLoad =
             for a, b in hitBodies.Pairwise() do
                 JointFactory.CreateRevoluteJoint(world, a, b, b.GetLocalPoint(p))
                 ()
-         
-        Debug.WriteLine("BODYLIST ZERO")
-        Debug.WriteLine(world.BodyList.Count)
+                 
         world, statics, dynamics, player
