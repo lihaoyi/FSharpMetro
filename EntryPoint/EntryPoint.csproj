@@ -125,9 +125,9 @@
       <Project>{cf18aad1-c336-428a-abb1-80d35112e4a8}</Project>
       <Name>Farseer Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PortableLibrary1\PortableFSharp.fsproj">
+    <ProjectReference Include="..\Application\Application.fsproj">
       <Project>{fde55019-442e-42ad-8e98-9731e7cd6f11}</Project>
-      <Name>PortableFSharp</Name>
+      <Name>Application</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

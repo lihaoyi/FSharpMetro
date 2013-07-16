@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples XNA Win8", "Samples XNA\Samples XNA Win8.csproj", "{538DFF2A-1F50-437A-BB11-30675988E65F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntryPoint", "EntryPoint\EntryPoint.csproj", "{538DFF2A-1F50-437A-BB11-30675988E65F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestLibrary1", "UnitTestLibrary1\UnitTestLibrary1.csproj", "{4CFC9091-6E04-4EDC-B018-72C688386A3B}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "PortableFSharp", "PortableLibrary1\PortableFSharp.fsproj", "{FDE55019-442E-42AD-8E98-9731E7CD6F11}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Application", "Application\Application.fsproj", "{FDE55019-442E-42AD-8E98-9731E7CD6F11}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farseer Portable", "Farseer Portable\Farseer Portable.csproj", "{CF18AAD1-C336-428A-ABB1-80D35112E4A8}"
 EndProject

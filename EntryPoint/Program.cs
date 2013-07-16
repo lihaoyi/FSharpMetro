@@ -1,8 +1,11 @@
 
 using System.Xml.Linq;
+using FarseerPhysics.Collision.Shapes;
+using FarseerPhysics.Common;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MyFSharp;
+
 
 namespace FarseerPhysics.SamplesFramework
 {
@@ -25,28 +28,30 @@ namespace FarseerPhysics.SamplesFramework
     {
         public FarseerPhysicsGame()
         {
+            
             Window.Title = "Farseer Samples Framework";
             var graphics = new GraphicsDeviceManager(this);
             graphics.PreferMultiSampling = true;
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
-
+            
             Content.RootDirectory = "Content";
             
             graphics.DeviceCreated += (x, y) => {
                 graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             };
+            
 
             Components.Add(new AppView(this));
         }
     }
     public class AppView : DrawableGameComponent
     {
-        private App app;
+        private Game.App app;
         public AppView(Microsoft.Xna.Framework.Game game)
             : base(game)
         {
-            app = new App(x => XElement.Load(x), game);
+            app = new Game.App(x => XElement.Load(x), game);
         }
         public override void Update(GameTime gameTime)
         {

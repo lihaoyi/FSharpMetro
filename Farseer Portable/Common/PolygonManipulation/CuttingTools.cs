@@ -9,6 +9,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
 {
     public static class CuttingTools
     {
+        
         //Cutting a shape into two is based on the work of Daid and his prototype BoxCutter: http://www.box2d.org/forum/viewtopic.php?f=3&t=1473
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
             Vector2 localExitPoint = fixture.Body.GetLocalPoint(ref exitPoint);
 
             PolygonShape shape = fixture.Shape as PolygonShape;
-
+            
             if (shape == null)
             {
                 first = new Vertices();
@@ -140,7 +141,7 @@ namespace FarseerPhysics.Common.PolygonManipulation
             //We don't support cutting when the start or end is inside a shape.
             if (world.TestPoint(start) != null || world.TestPoint(end) != null)
                 return;
-
+            
             //Get the entry points
             world.RayCast((f, p, n, fr) =>
                               {

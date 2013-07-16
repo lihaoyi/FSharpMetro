@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 17.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="1600px" height="900px" viewBox="0 0 1600 900" enable-background="new 0 0 1600 900" xml:space="preserve">
+<g id="Foreground">
+</g>
+<g id="Background">
+</g>
+<g id="Collision">
+	
+		<rect x="470.517" y="147.159" transform="matrix(-0.5 0.866 -0.866 -0.5 1069.8022 -123.3443)" fill="#008800" width="199.98" height="199.98"/>
+	
+		<rect x="685.098" y="123.652" transform="matrix(-0.7071 0.7071 -0.7071 -0.7071 1498.3871 -173.3529)" fill="#008800" width="199.996" height="199.996"/>
+	<rect x="900" y="600" fill="#008800" width="200" height="200"/>
+	<rect y="800" fill="#880000" width="700" height="100"/>
+	<rect x="900" y="800" fill="#880000" width="700" height="100"/>
+</g>
+<g id="Dynamic">
+	<circle fill="#0000FF" cx="459.122" cy="761.002" r="38.998"/>
+</g>
+<g id="Pins">
+	<circle fill="#00FF00" cx="677.894" cy="221.676" r="10.499"/>
+	<circle fill="#FF0000" cx="902.797" cy="221.676" r="10.499"/>
+</g>
+<polygon fill="#008800" points="403.5,788.924 325.098,731.348 233.221,763.293 263.752,670.936 204.979,593.427 302.25,593.924 
+	357.803,514.076 387.389,606.74 480.496,634.9 401.51,691.672 "/>
+<polygon fill="#008800" points="569.5,770.504 523.998,752.316 516.998,703.816 555.5,673.504 601.002,691.692 608.002,740.192 "/>
+</svg>

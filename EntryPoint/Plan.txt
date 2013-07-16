@@ -1,0 +1,137 @@
+﻿GameFormat
+	Layers
+		Background
+			Art
+
+		Dynamic
+			BlueCircle. Player
+
+		NoCollision
+			Blue.	
+		
+		Collision
+			Black-	Static
+			Red-	Movable
+			Green-	Moveable & Cuttable
+		
+		Pins
+			RedCircle-	Static Pin
+			BlueCircle-	Dynamic Pin
+
+		Foreground
+			Art
+
+Mechanics
+	Paths
+		Mana
+			Finite quantity, regenerates quickly
+			Used to draw paths 
+
+		Effects
+			Accelerate
+				Only affects player
+				Positive Acceleration
+
+			Cut
+				Affects world and some enemies
+
+			Bouncing
+				Affects world and all enemies
+
+	Health
+		Stunned for X seconds when "hit"
+			Knocked back
+			Still behaves kinematically
+			Cannot follow paths
+			Cannot be hit while stunned
+
+		Stunning should be sufficient penalty/risk of failure
+
+		Death from falling below edge of map
+			Or for edge of map rising above you!
+			Restart level/from last checkpoint
+
+	Enemies
+		Block with paths
+
+		Swipe
+	
+Game 
+	Tutorial
+		Individual, single-screen maps. Suitable as a tutorial for the player
+		to get used to the basic mechanics of the game
+
+		Moving
+		Cutting
+		Bouncing
+		Physics and Weights
+		Momentum
+
+	Puzzles
+		Large maps which are not meant to be solved under time constraints, but
+		require creative use of cuts and physics to complete.
+
+		Lever/Counterweight
+		Flowing Balls
+		Ricochet
+
+	Race
+		High speed sidescrolling action, with the goal of traversing the map as
+		quickly as possible
+
+		Icebergs
+			Icebergs sink when you sit on them
+			Water below doesn't kill but slows you down when you drop in
+
+		Underwater
+			Floating upwards!
+			Much greater viscosity
+
+		Cave
+			Lots of vertical impediments
+			Both roof and floor
+
+	Climber
+		Equivalent to "story" mode
+
+		"infinite" climbing
+
+		Seamless save/check-points along the way
+
+		Varying styles of map along the way
+
+		House
+			Things are regular, blocky, square and neatly arranged. 
+
+		Roofing
+			A maze of piping and wires and all that. Lots and lots of 
+			moving parts since this is what keeps the ventilation of the
+			house running.
+
+		Wall
+			The outside of the house next to a brick wall; all bodies of 
+			interest are attached to the solid wall on one side of the 
+			screen, while the other side is open space.
+
+		Trees
+			Lots of branches and leaves, forming a maze that the player has
+			to navigate.
+
+		Sky
+			Sparsely occupied, primarily jumping from cloud to cloud using 
+			air currents to give you a boost. Occasional balloons or air
+			planes to spice things up
+
+		Space
+			Mostly jumping from satellites and meteors; have to make heavy 
+			use of bouncing to prevent things from knocking you out of 
+			their way
+
+		Cinematics
+			Opening 
+				Crashing through all these scenes in reverse order, ending up 
+				at the start location
+
+			Closing
+				Reaching the original height (end location) and becoming a 
+				star again
