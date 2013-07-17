@@ -1,5 +1,6 @@
 ﻿module Extensions
 open System
+open System.Diagnostics
 open System.Collections.Generic
 open System.Xml.Linq
 open System.Linq
@@ -17,18 +18,36 @@ let ns = "{http://www.w3.org/2000/svg}"
 type IEnumerable<'T> with 
     member this.Pairwise() = 
         let rest = this.Skip(1)
-        (Seq.zip this rest)
-
+        Seq.zip this rest
 type World with 
+    
     member this.TestRay(p1: Vector2, p2: Vector2) = 
-        let res: ref<bool> = ref true
         
-        this.RayCast((fun (fixture: Fixture) (point: Vector2) (normal: Vector2) (fraction: float32) ->
-            res.Value <- false
-            1.0f), 
-            p1, p2)
+        if p1 = p2 then
+            not(this.TestPointAll(p1).Any(fun f -> f.CollisionGroup <> -1s))
+        else
+            let res = ref true    
 
-        res.Value
+            // Doesn't Work???
+            (*this.RayCast(
+                fun (fixture: Fixture) (point: Vector2) (normal: Vector2) (fraction: float32) ->
+                    Debug.WriteLine(fixture.Shape.GetType())
+                    if fixture.CollisionGroup <> -1s then
+                        res.Value <- false
+                        
+                    1.0f
+                , 
+                p1, 
+                p2
+            )*)
+            
+            let vertexRes = 
+                [p1; p2].Select(this.TestPoint)
+                        .All(fun x -> x = null || x.CollisionGroup = -1s)
+
+            
+            vertexRes
+            
 
 type Body with
     member this.Contains(point: Vector2) =
@@ -48,6 +67,10 @@ type Vector2 with
         )
     member this.Normal() = new Vector2(-this.Y, this.X)
     member this.Unit() = Vector2.Normalize(this)
+    member this.Dot(other: Vector2) = 
+        this.X * other.X + this.Y * other.Y
+    member this.Project(other: Vector2) = 
+        this.Dot(other) * other
 
 type Vector3 with
     member this.To2() = new Vector2(this.X, this.Y)

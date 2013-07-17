@@ -21,70 +21,89 @@ open Graphics
 
 [<AbstractClass>]
 type Component() = 
-
     abstract member Draw: GraphicsDevice * GameTime -> Unit
     abstract member Update: GameTime -> Unit
     
-type Paths(world: World) = 
+type Paths(world: World, player: Body) = 
     inherit Component()
-    let path = new Dictionary<int, Vector2 * list<Body>>()
+
+    let path = new Dictionary<int, ref<Vector2> * Body>()
+
     override this.Update(g: GameTime) = 
         let touchCollection = TouchPanel.GetState();
-        
+            
         for loc in touchCollection do     
            this.HandleTouch(loc)
-
+        
+        let mutable force = new Vector2()
+        for p, body in path.Values do
+            let mutable pathForce = new Vector2()
+            for fixture in body.FixtureList do
+                let shape = fixture.Shape :?> EdgeShape
+                if player.Contains(body.GetWorldPoint shape.Vertex1) || player.Contains(body.GetWorldPoint shape.Vertex2) then
+                    let forward = (shape.Vertex2 - shape.Vertex1).Unit() * 10.0f
+                    let perp = forward.Normal().Unit()
+                    let suck = ((body.GetWorldPoint shape.Vertex1) - player.Position).Project(perp) * 10.0f
+                    let drag = player.LinearVelocity.Project(perp) * -10.0f
+                    pathForce <- forward + suck + drag
+                    
+            force <- force + pathForce
+            player.ApplyForce(force)
+        
+                
+        
     member this.HandleTouch(loc: TouchLocation) = 
             
         match loc.State with
         | TouchLocationState.Pressed ->                
-            path.[loc.Id] <- (Misc.TouchScreenToWorld.Transform(loc.Position), [])
+            let pos = Misc.TouchScreenToWorld.Transform(loc.Position)
+            path.[loc.Id] <- (
+                ref pos, 
+                BodyFactory.CreateBody(world, pos)
+            )
 
         | TouchLocationState.Moved ->
-            let last, p = path.[loc.Id]
-            Debug.WriteLine(last)
+            let last, body = path.[loc.Id]
             let pos = Misc.TouchScreenToWorld.Transform(loc.Position)
-
             
-            let noCollisions = 
-                [pos; last].Select(world.TestPoint)
-                           .All(fun x -> x = null || x.CollisionGroup = -1s)
-            let newBody = 
-                if noCollisions then
-                    let body = BodyFactory.CreateEdge(world, last, pos)
-                    body.CollisionGroup <- -1s
-                    [body]
-                else
-                    []
-
-            path.[loc.Id] <- (pos, newBody @ p)
+            if last.Value <> pos then
+                let noCollisions = world.TestRay(pos, last.Value)
                 
+            
+                if noCollisions then
+                    let fixture = FixtureFactory.AttachEdge(last.Value - body.Position, pos - body.Position, body)
+                
+                    fixture.CollisionGroup <- -1s
+                
+                    ()
+
+                last.Value <- pos
             ()
                 
         | TouchLocationState.Released ->
-            let last, bodies = path.[loc.Id]
+            let last, body = path.[loc.Id]
             for body in world.BodyList do
                 body.Awake <- true
-
-            for body in bodies do
-                    
-                world.RemoveBody(body)
+        
+            world.RemoveBody(body)
                     
             path.Remove(loc.Id)
             ()
 
     override this.Draw(g: GraphicsDevice, gameTime: GameTime) = 
         for last, body in path.Values do 
-                for line in body do
-                    let shape = line.FixtureList.[0].Shape :?> EdgeShape
-                    g.Lines(Misc.WorldToScreen, [shape.Vertex1; shape.Vertex2], Color.Yellow, 0.1f)
+            for line in body.FixtureList do
+                let shape = line.Shape :?> EdgeShape
+                let points = [shape.Vertex1; shape.Vertex2].Select(fun p -> body.GetWorldPoint(ref p))
+                g.Lines(Misc.WorldToScreen, points, Color.Yellow, 0.1f)
 
 type Level(world: World,
            statics: list<Body>,
            dynamics: list<Body>,
            player: Body) =
     inherit Component()
-    let paths = new Paths(world)
+    let paths = new Paths(world, player)
+
     override this.Update(gameTime: GameTime) = 
         paths.Update(gameTime)
         world.Step(
@@ -93,7 +112,6 @@ type Level(world: World,
                 float32 (1.0f / 30.0f)
             )
         )
-
     
     override this.Draw(g: GraphicsDevice, gameTime: GameTime) = 
         g.Clear(Color.DarkGreen);
