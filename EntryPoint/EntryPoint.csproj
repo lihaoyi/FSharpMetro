@@ -119,10 +119,6 @@
     <Content Include="Assets\StoreLogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Farseer Portable\Farseer Portable.csproj">
-      <Project>{cf18aad1-c336-428a-abb1-80d35112e4a8}</Project>
-      <Name>Farseer Portable</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Application\Application.fsproj">
       <Project>{fde55019-442e-42ad-8e98-9731e7cd6f11}</Project>
       <Name>Application</Name>
@@ -133,37 +129,41 @@
       <HintPath>..\MonoGameDll\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\MonoGameDll\SharpDX.dll</HintPath>
+      <HintPath>..\DLLs\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.D3DCompiler">
-      <HintPath>..\MonoGameDll\SharpDX.D3DCompiler.dll</HintPath>
+    <Reference Include="SharpDX.D3DCompiler, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\MonoGameDll\SharpDX.Direct2D1.dll</HintPath>
+      <HintPath>..\DLLs\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D11">
-      <HintPath>..\MonoGameDll\SharpDX.Direct3D11.dll</HintPath>
+      <HintPath>..\DLLs\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI">
-      <HintPath>..\MonoGameDll\SharpDX.DXGI.dll</HintPath>
+      <HintPath>..\DLLs\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.MediaFoundation">
-      <HintPath>..\MonoGameDll\SharpDX.MediaFoundation.dll</HintPath>
+      <HintPath>..\DLLs\SharpDX.MediaFoundation.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Toolkit">
-      <HintPath>..\MonoGameDll\SharpDX.Toolkit.dll</HintPath>
+    <Reference Include="SharpDX.Toolkit, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\SharpDX.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Toolkit.Game">
-      <HintPath>..\MonoGameDll\SharpDX.Toolkit.Game.dll</HintPath>
+    <Reference Include="SharpDX.Toolkit.Game, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\SharpDX.Toolkit.Game.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Toolkit.Graphics">
-      <HintPath>..\MonoGameDll\SharpDX.Toolkit.Graphics.dll</HintPath>
+    <Reference Include="SharpDX.Toolkit.Graphics, Version=2.4.2.0, Culture=neutral, PublicKeyToken=627a3d6d1956f55a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\SharpDX.Toolkit.Graphics.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.XAudio2">
-      <HintPath>..\MonoGameDll\SharpDX.XAudio2.dll</HintPath>
+      <HintPath>..\DLLs\SharpDX.XAudio2.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.XInput">
-      <HintPath>..\MonoGameDll\SharpDX.XInput.dll</HintPath>
+      <HintPath>..\DLLs\SharpDX.XInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
