@@ -23,7 +23,7 @@ let player = "#0000FF"
 
 let Load (EditorToWorld: Matrix) (doc: XElement) = 
     let world = new World(new Vector2(0.0f, 9.81f))
-        
+    
     let pins (fill: String) = 
         doc.Subs(name="circle", fill=fill)
            .Select(fun (x: XElement) -> new Vector2(x.Attr<float32>("cx"), x.Attr<float32>("cy")))
@@ -43,6 +43,7 @@ let Load (EditorToWorld: Matrix) (doc: XElement) =
     let newPlayerR = (sidePoint - newPlayerLoc).Length()
 
     let player = BodyFactory.CreateCircle(world, newPlayerR, 1.0f, newPlayerLoc)
+    
     player.BodyType <- BodyType.Dynamic;
     
     
@@ -67,34 +68,40 @@ let Load (EditorToWorld: Matrix) (doc: XElement) =
                     let res = Math.Atan2((float a), (float b))
                     -(float32 res)
                 
-            let rect = BodyFactory.CreateRectangle(world, (p2 - p1).X, (p2 - p1).Y, 1.0f)
+            let rect = BodyFactory.CreateRectangle(
+                world, 
+                (p2 - p1).X, 
+                (p2 - p1).Y, 
+                1.0f,
+                (p2 + p1) / 2.0f
+            )
             rect.Rotation <- rotation
-            rect.Position  <- (p2 + p1) / 2.0f
+            
             rect
-        | "polygon" ->
+
+        | "polygon" | "polyline" ->
             let rawPoints = 
                 elem.Attr<String>("points")
                     .Split(' ', '\n')
                     .Select(fun (x: String) -> x.Split(','))
                     .ToArray()
-            Debug.WriteLine("RawPoints")        
-            Debug.WriteLine(elem.Attr<String>("points"))
+            
             let points = [|
                 for x in rawPoints do 
                     match x with 
                     | [|a; b|] -> yield EditorToWorld.Transform(new Vector2(float32 a, float32 b))
                     | _ -> ()    
             |]
+            let centroid = (new Vertices(points)).GetCentroid()
+            let centeredPoints =  [| for x in points -> x - centroid |]
             
-            Debug.WriteLine("XXX")
-            let b = BodyFactory.CreateCompoundPolygon(
+            Debug.WriteLine "XXX"
+            BodyFactory.CreateCompoundPolygon(
                 world,
-                BayazitDecomposer.ConvexPartition(new Vertices(points)), 
-                1.0f
+                BayazitDecomposer.ConvexPartition(new Vertices(centeredPoints)), 
+                1.0f,
+                centroid
             )
-            Debug.WriteLine(b.Position)
-            Debug.WriteLine("YYY")
-            b
 
 
     let statics = 
@@ -120,6 +127,6 @@ let Load (EditorToWorld: Matrix) (doc: XElement) =
         for a, b in hitBodies.Pairwise() do
             JointFactory.CreateRevoluteJoint(world, a, b, b.GetLocalPoint(p))
             ()
-                 
+    player.CollisionGroup <- -1s                 
     world, statics, dynamics, player
 

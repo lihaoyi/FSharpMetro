@@ -108,9 +108,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="Assets\out.svg" />
-    <Content Include="out.svg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Level\Test.svg" />
     <Content Include="Plan.txt" />
     <None Include="Samples XNA Win8_TemporaryKey.pfx" />
   </ItemGroup>

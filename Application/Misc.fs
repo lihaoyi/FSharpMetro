@@ -9,8 +9,6 @@ open FarseerPhysics.Common
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
 
-
-
 // Normal world is 16x9
 let EditorToWorld = Matrix.Multiply(
     Matrix.CreateTranslation(-800.0f, -450.0f, 0.0f),

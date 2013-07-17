@@ -23,26 +23,34 @@ let getVertices(shape: Shape): seq<Vector2> =
         s.Vertices :> seq<Vector2>
 
 type GraphicsDevice with
+    member this.DrawFill(WorldToScreen: Matrix, body: Body, color: Color, width: float32) = 
+        this.Draw(WorldToScreen, body, color, width)
+        let d = 225
+        this.Fill(WorldToScreen, body, new Color(int color.R + d, int color.G + d, int color.B + d))
+    member this.Lines(WorldToScreen: Matrix, vertices: seq<Vector2>, color: Color, width: float32) = 
+        let pairs = (Seq.append vertices [vertices.First()]).Select(fun (x: Vector2) -> x).Pairwise()
+
+        for p1, p2 in pairs do
+            
+            let normal = (p2 - p1).Normal().Unit() * (width / 2.0f)
+            let points = [| p1 + normal; p1 - normal; p2 + normal; p2 - normal |]
+            let outs = [| for x in points -> new VertexPositionColor(WorldToScreen.Transform(x).To3(), color) |]
+                                 
+            this.DrawUserPrimitives<VertexPositionColor>(
+                PrimitiveType.TriangleStrip,
+                outs,
+                0,
+                outs.Length - 2,
+                VertexPositionColor.VertexDeclaration
+            );
     member this.Draw(WorldToScreen: Matrix, body: Body, color: Color, width: float32) = 
         for fixture in body.FixtureList do
             
             let vertices = getVertices(fixture.Shape)
+                            |> Seq.map(fun x -> body.GetWorldPoint(x))
 
-            let pairs = (Seq.append vertices [vertices.First()]).Select(fun (x: Vector2) -> body.GetWorldPoint(x)).Pairwise()
-
-            for p1, p2 in pairs do
+            this.Lines(WorldToScreen, vertices, color, width)
             
-                let normal = (p2 - p1).Normal().Unit() * (width / 2.0f)
-                let points = [| p1 + normal; p1 - normal; p2 + normal; p2 - normal |]
-                let outs = [| for x in points -> new VertexPositionColor(WorldToScreen.Transform(x).To3(), color) |]
-                                 
-                this.DrawUserPrimitives<VertexPositionColor>(
-                    PrimitiveType.TriangleStrip,
-                    outs,
-                    0,
-                    outs.Length - 2,
-                    VertexPositionColor.VertexDeclaration
-                );
         
     member this.Fill(WorldToScreen: Matrix, body: Body, color: Color) = 
         for fixture in body.FixtureList do

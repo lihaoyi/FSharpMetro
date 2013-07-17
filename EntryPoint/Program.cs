@@ -41,7 +41,7 @@ namespace FarseerPhysics.SamplesFramework
                 graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             };
             
-
+            
             Components.Add(new AppView(this));
         }
     }

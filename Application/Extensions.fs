@@ -19,6 +19,17 @@ type IEnumerable<'T> with
         let rest = this.Skip(1)
         (Seq.zip this rest)
 
+type World with 
+    member this.TestRay(p1: Vector2, p2: Vector2) = 
+        let res: ref<bool> = ref true
+        
+        this.RayCast((fun (fixture: Fixture) (point: Vector2) (normal: Vector2) (fraction: float32) ->
+            res.Value <- false
+            1.0f), 
+            p1, p2)
+
+        res.Value
+
 type Body with
     member this.Contains(point: Vector2) =
         this.FixtureList.Any(fun fixture ->
